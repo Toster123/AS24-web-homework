@@ -1,9 +1,6 @@
 from django.urls import path
 
 from .views import *
-from rest_framework.routers import DefaultRouter
-
-router = DefaultRouter()
 
 urlpatterns = [
     path('', ArticleViewSet.as_view({'get': 'list', 'post': 'create'})),

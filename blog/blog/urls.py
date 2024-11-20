@@ -24,6 +24,6 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     path(apiRoutePrefix + 'auth/', include('djoser.urls')),
     re_path(apiRoutePrefix + 'auth/', include('djoser.urls.authtoken')),
-    path(apiRoutePrefix + 'users/', include('users.urls')),
+    re_path(apiRoutePrefix + 'users/', include('users.urls')),
     path(apiRoutePrefix + 'articles/', include('articles.urls')),
 ]
