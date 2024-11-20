@@ -1,16 +1,13 @@
-from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
-from .models import *
 from rest_framework import viewsets
 from .serializers import *
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_permissions(self):
         permission_classes = []
@@ -30,17 +27,12 @@ class ArticleViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def create(self, request):
-        # request.data.update({'author': request.user.id})
         return viewsets.ModelViewSet.create(self, request)
 
-    def update(self, request, pk=None):
-        # if request.data['author']:
-        #     request.data.update({'author': request.user.id})
-        return viewsets.ModelViewSet.update(self, request, pk)
+    def update(self, request, *args, **kwargs):
+        return viewsets.ModelViewSet.update(self, request, *args, **kwargs)
 
     def partial_update(self, request, pk=None):
-        # if request.data['author']:
-        #     request.data.update({'author': request.user.id})
         return viewsets.ModelViewSet.partial_update(self, request, pk)
 
     def destroy(self, request, pk=None):
