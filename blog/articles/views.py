@@ -7,23 +7,41 @@ from .models import *
 from rest_framework import viewsets
 from .serializers import *
 
+
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all()
     serializer_class = ArticleSerializer
-    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def get_permissions(self):
+        permission_classes = []
+
+        if self.action not in ('list', 'retrieve'):
+            permission_classes.append(IsAuthenticated)
+
+        return (permission() for permission in permission_classes)
+
+    def get_queryset(self):
+        if self.action in ('list', 'retrieve'):
+            return Article.objects.all()
+        else:
+            return Article.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     def create(self, request):
-        permission_classes = (IsAuthenticated,)
+        # request.data.update({'author': request.user.id})
         return viewsets.ModelViewSet.create(self, request)
 
     def update(self, request, pk=None):
-        permission_classes = (IsAuthenticated,)
+        # if request.data['author']:
+        #     request.data.update({'author': request.user.id})
         return viewsets.ModelViewSet.update(self, request, pk)
 
     def partial_update(self, request, pk=None):
-        permission_classes = (IsAuthenticated,)
+        # if request.data['author']:
+        #     request.data.update({'author': request.user.id})
         return viewsets.ModelViewSet.partial_update(self, request, pk)
 
     def destroy(self, request, pk=None):
-        permission_classes = (IsAuthenticated,)
         return viewsets.ModelViewSet.destroy(self, request, pk)

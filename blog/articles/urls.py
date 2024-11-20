@@ -7,8 +7,6 @@ router = DefaultRouter()
 
 urlpatterns = [
     path('', ArticleViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('<int:pk>', ArticleViewSet.as_view({'get': 'retrieve'})),
-    path('<int:pk>', ArticleViewSet.as_view({'put': 'update'})),
-    path('<int:pk>', ArticleViewSet.as_view({'patch': 'partial_update'})),
-    path('<int:pk>', ArticleViewSet.as_view({'delete': 'destroy'})),
+    path('<int:pk>/',
+         ArticleViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'})),
 ]
